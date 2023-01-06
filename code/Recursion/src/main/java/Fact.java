@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Fact {
 //    0!=1
 //    n!=n(n-1)!
@@ -54,14 +56,54 @@ public class Fact {
     //You do not have to create a new array for each recursion call
     public static long sum_r(int[] nVals)
     {
-
+        if(nVals.length==0) return 0;
+        //if(nVals.length==1) return nVals[0]; //this also works
+        return nVals[0]+sum_r(Arrays.copyOfRange(nVals,1,nVals.length-1));
     }
+
+    public static long sum_r1(int[] nVals)//Help method
+    {
+        return sum_r1_int(nVals,0);
+    }
+
+    public static long sum_r1_int(int[] nVals,int nStart)
+    {
+        if(nStart==nVals.length-1) return nVals[nVals.length-1];
+        return nVals[nStart]+sum_r1_int(nVals,nStart+1);
+    }
+
 
     public static long sum(int[] nVals)
     {
         int rs = 0;
         for(int n:nVals)rs+=n;
         return rs;
+    }
+
+    public static boolean isPalindrome(String s)
+    {
+        for(int i=0,j=s.length()-1;i<j;i++,j--)
+            if(s.charAt(i)!=s.charAt(j)) return false;
+        return true;
+    }
+
+    public static boolean isPalindrome_r(String s)
+    {
+        if(s.length()<2) return true;
+        if(s.charAt(0)!=s.charAt(s.length()-1)) return false;
+        return isPalindrome_r(s.substring(1,s.length()-1));
+    }
+
+    public static boolean isPalindrome_r1(String s)
+    {
+        return isPalindrome_r1_int(s,0,s.length()-1);
+    }
+
+    public static boolean isPalindrome_r1_int(String s,int low,int high)
+    {
+        if(low > high) return true;
+        if(s.charAt(low)!=s.charAt(high)) return false;
+        return isPalindrome_r1_int(s,low+1,high-1);
     }
 
 
