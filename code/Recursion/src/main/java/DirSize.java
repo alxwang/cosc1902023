@@ -25,6 +25,7 @@ public class DirSize {
     //HOMEWORK!
     //1. Make this app works in your PC
     //2. Change the code only count the size of all *.exe files
+    //      file.getName() will return file name
     //3. Change the code:
     //3.1 Read one more input from users call large_file_size as int
     //3.2 Print out all large file in the dir(file size>large_file_size)
