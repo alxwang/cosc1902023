@@ -35,14 +35,21 @@ public class App {
         return (double)left/(double)right;
     }
 
-    public static double[] divide(int[] left, int[] right) throws IllegalArgumentException, IndexOutOfBoundsException,
-            EmptyListException {
-        if(left.length==0 || left.length!= right.length)
-        {
-            throw new EmptyListException(left);//("Input must be an array with at lease one element");
-//            IndexOutOfBoundsException  e = new IndexOutOfBoundsException("Input must be an array with at lease one element");
-//            throw e;
-        }
+    public static double[] divide(int[] left, int[] right) throws IllegalArgumentException, IndexOutOfBoundsException
+            /*,EmptyListException*/ {
+//        if(left.length==0 || left.length!= right.length)
+//        {
+//            throw new EmptyListException(left);//("Input must be an array with at lease one element");
+////            IndexOutOfBoundsException  e = new IndexOutOfBoundsException("Input must be an array with at lease one element");
+////            throw e;
+//        }
+        //THis is a business logic method so most likely left.len =0 ...  won't happen beucase user's input or memeory has problem
+        //If it happens, should be caused a bug - developer mistake
+        //assert left.length>0:"ARG should not be zero len array";
+        //https://se-education.org/guides/tutorials/intellijUsefulSettings.html
+        assert left.length==right.length:
+                String.format("Arg1 has %d len <> Arg2 len %d",left.length,right.length);
+
         double[] rs = new double[left.length];
         //You can make your choice to either handle the exception with try catch
         //Or pass the exception to the caller by declare the exception in the sign
@@ -109,24 +116,27 @@ public class App {
         //new ArrayList<Integer>(Arrays.asList(1,2,3,4)).stream().mapToInt(i->i).toArray()
 
         try {
-            System.out.println(
-                    divide(left,right)
+//            System.out.println(
+//                    divide(left,right)
 //                    divide(new ArrayList<Integer>(Arrays.asList(getaNumber("Please enter a number:"))).
 //                                    stream().mapToInt(i->i).toArray(),
 //                            new ArrayList<Integer>(Arrays.asList(getaNumber("Please enter another number:"))).
 //                                    stream().mapToInt(i->i).toArray())
-            );
+//            );
+            int []a ={};
+            int[]b={1,2,3};
+            divide(a,b);
         }
         catch(IllegalArgumentException e)
         {
             System.out.println(e.getMessage());
         }
-        catch (EmptyListException e)
-        {
-            int[] list = e.getData();
-            System.out.println(Arrays.toString(list));
-
-        }
+//        catch (EmptyListException e)
+//        {
+//            int[] list = e.getData();
+//            System.out.println(Arrays.toString(list));
+//
+//        }
         catch (RuntimeException e)
         {
 

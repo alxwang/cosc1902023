@@ -1,0 +1,4 @@
+Hello!
+one00
+3.one4one592653589793
+This is my text file C:\Users\wangxi\OneDrive - Saskatchewan Polytechnic\Desktop\Class_Github\coscone902023\code\TextIODemo\test.txttest.txt size 0
