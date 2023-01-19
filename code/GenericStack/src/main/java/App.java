@@ -4,6 +4,10 @@ public class App {
         while(stack.getSize()>0) System.out.println(stack.pop());
     }
 
+
+    //We want the E in the stack is a number so we can call doubleValue method
+    //It does not work because the concrete class we can use are Integer, Double...
+    //A GenericStack<Integer> is NOT a GenericStack<Number>
     public static double max(GenericStack<Number> stack) {
         double max = stack.pop().doubleValue(); // Initialize max
 
@@ -15,6 +19,8 @@ public class App {
         return max;
         }
 
+
+        //we can solve the problem by making the method generic method
     public static <E extends  Number>double max1(GenericStack<E> stack) {
         double max = stack.pop().doubleValue(); // Initialize max
 
@@ -26,6 +32,7 @@ public class App {
         return max;
     }
 
+    //Or we can use wildcard.
     public static double max2(GenericStack<? extends Number> stack) {
         double max = stack.pop().doubleValue(); // Initialize max
 
