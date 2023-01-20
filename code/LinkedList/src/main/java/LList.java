@@ -20,28 +20,29 @@ public class LList <T>{
         //Insert a new node with data into the list after the node after it
         //should be three line of code
         Node<T> node = new Node<>(data);
+        //set Previous node's next to the current nodes next will drop the cur node
         node.setNext(afterit.getNext());
         afterit.setNext(node);
     }
 
-    public Node<T> findFrom(Node<T> node)
+    public Node<T> findPreviousNode(Node<T> node)
     {
-        //Return the node before node
+        //Return the Previous node
         //Same idea as find
-        return findFrom(this.head,node,null);
+        return findPreviousNode(this.head,node,null);
     }
 
-    private Node<T> findFrom(Node<T> cur, Node<T> node, Node<T> before)
+    private Node<T> findPreviousNode(Node<T> cur, Node<T> node, Node<T> before)
     {
         if(cur==null) return null;
         if(cur.equals(node)) return before;
-        return findFrom(cur.getNext(),node,cur);
+        return findPreviousNode(cur.getNext(),node,cur);
     }
 
     public void remove(Node<T> node)
     {
         //Remove the node and return the node before node
-        Node<T> before = findFrom(node);
+        Node<T> before = findPreviousNode(node);
         if(before!=null)
         {
             before.setNext(node.getNext());
@@ -54,8 +55,8 @@ public class LList <T>{
         node1.setData(node2.getData());
         node2.setData(temp);
 
-        // Remove node1 ang keep the from node of node1
-        // remove node2 and keep the from node of node2
+        // Remove node1 ang keep the Previous node of node1
+        // remove node2 and keep the Previous node of node2
         //insert them back to the right spot
     }
 
