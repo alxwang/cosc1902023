@@ -1,5 +1,16 @@
+import java.util.Random;
+
 public class Apple {
-    public enum Color{Red, Green, Yellow};
+    public enum Color{
+        Red, Green, Yellow;
+        private static final Random PRGN = new Random();
+        public static Color randomColor()
+        {
+            Color[] clrs = values();
+            return clrs[PRGN.nextInt(clrs.length)];
+        }
+        
+    };
     private double weight;
     private Color color;
 
