@@ -82,6 +82,20 @@ public class App {
         }
     }
 
+
+    public static void printApples(List<Apple> apples)
+    {
+        for(Apple a : apples) System.out.println(a);
+        System.out.println("--------------------------------------");
+    }
+
+    public static void printApples(List<Apple> apples,AppleFormatter formatter)
+    {
+        for(Apple a : apples) System.out.println(formatter.accept(a));
+        System.out.println("--------------------------------------");
+    }
+
+
     public static void main(String[] args) {
         List<Apple> apples = genApples();
 //        List<Apple> greenApples = filterGreen(apples);
@@ -96,15 +110,43 @@ public class App {
 //        System.out.println("--------------------------------------");
           List<Apple> redApples = filterApples(apples,
                   new ApplePredictByColor(Apple.Color.Red));
-          for(Apple a : redApples) System.out.println(a);
-          System.out.println("--------------------------------------");
+          printApples(redApples);
+
         List<Apple> greenApples = filterApples(apples,
                 new ApplePredictByColor(Apple.Color.Green));
-        for(Apple a : greenApples) System.out.println(a);
-        System.out.println("--------------------------------------");
-        List<Apple> bigApple = filterApples(apples,new ApplePredictByWeight(0.5));
-        for(Apple a : bigApple) System.out.println(a);
-        System.out.println("--------------------------------------");
+        printApples(greenApples);
 
+        List<Apple> bigApple = filterApples(apples,new ApplePredictByWeight(0.5));
+        printApples(bigApple);
+
+        printApples(apples,new AppleFormatter1());
+
+    }
+
+    static class ApplePredictByColorAndWeight implements ApplePredict
+    {
+        private Apple.Color color;
+        private double weight;
+        public ApplePredictByColorAndWeight(Apple.Color color,double weight)
+        {
+            this.weight=weight;
+            this.color=color;
+        }
+        @Override
+        public boolean test(Apple apple) {
+            return (apple.getWeight()>=weight && apple.getColor().equals(color));
+        }
+    }
+
+    static class AppleFormatter1 implements AppleFormatter{
+
+        @Override
+        public String accept(Apple apple) {
+            StringBuilder sb = new StringBuilder();
+            if(apple.getWeight()>=0.5) sb.append("BIG ");
+            if(apple.getColor().equals(Apple.Color.Red)) sb.append("RED ");
+            sb.append(apple);
+            return sb.toString();
+        }
     }
 }
