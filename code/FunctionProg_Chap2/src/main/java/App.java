@@ -33,6 +33,19 @@ public class App {
         return rs;
     }
 
+    public static List<Apple> filterByWeight(List<Apple> apples, double weight)
+    {
+        List<Apple> rs = new ArrayList<>();
+        for(Apple a: apples)
+        {
+            if(a.getWeight()>=weight) rs.add(a);
+        }
+        return rs;
+    }
+
+
+
+
 
 
 
@@ -41,7 +54,12 @@ public class App {
 //        List<Apple> greenApples = filterGreen(apples);
         List<Apple> greenApples = filterByColor(apples, Apple.Color.Green);
         for(Apple a : greenApples) System.out.println(a);
+        System.out.println("--------------------------------------");
         List<Apple> redApples = filterByColor(apples, Apple.Color.Red);
         for(Apple a : redApples) System.out.println(a);
+        System.out.println("--------------------------------------");
+        List<Apple> bigApples = filterByWeight(apples, 0.5);
+        for(Apple a : bigApples) System.out.println(a);
+        System.out.println("--------------------------------------");
     }
 }
