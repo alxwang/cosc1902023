@@ -20,7 +20,6 @@
             <artifactId>javafx-controls</artifactId>
             <version>18.0.2</version>
         </dependency>
-
     </dependencies>
 
 </project>
