@@ -12,10 +12,25 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 public class CircleResize extends Application {
+    Circle circle =new Circle(50);
+    Button btEnlarge = new Button("Enlarge");
+    Button btShrink = new Button("Shrink");
+
+    class btnClickHandlerInner implements EventHandler<ActionEvent>
+    {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            if(actionEvent.getSource()==btEnlarge)
+                circle.setRadius(circle.getRadius()+5);
+            else
+                circle.setRadius(circle.getRadius()-5);
+        }
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         StackPane pane = new StackPane();
-        Circle circle =new Circle(50);
         circle.setStroke(Color.BLACK);
         circle.setFill(Color.WHITE);
         pane.getChildren().add(circle);
@@ -23,8 +38,29 @@ public class CircleResize extends Application {
         HBox hBox = new HBox();
         hBox.setSpacing(10);
         hBox.setAlignment(Pos.CENTER);
-        Button btEnlarge = new Button("Enlarge");
-        Button btShrink = new Button("Shrink");
+//1. External class event handler
+//        btEnlarge.setOnAction(new btnEventHandler(circle,5));
+//        btShrink.setOnAction(new btnEventHandler(circle,-5));
+//2. Inner class event handler
+//        btEnlarge.setOnAction(new btnClickHandlerInner());
+//        btShrink.setOnAction(new btnClickHandlerInner());
+//3. Anonymous class event handler
+//        btEnlarge.setOnAction(new EventHandler<ActionEvent>() {
+//              @Override
+//              public void handle(ActionEvent actionEvent) {
+//                    circle.setRadius(circle.getRadius()+5);
+//              }
+//          });
+//        btShrink.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                    circle.setRadius(circle.getRadius()-5);
+//            }
+//        });
+        //4. Lambda
+        btShrink.setOnAction(e->circle.setRadius(circle.getRadius()-5));
+        btEnlarge.setOnAction(e->circle.setRadius(circle.getRadius()+5));
+
         hBox.getChildren().addAll(btEnlarge,btShrink);
 
         BorderPane borderPane = new BorderPane();
@@ -38,3 +74,20 @@ public class CircleResize extends Application {
 
     }
 }
+
+class btnEventHandler implements EventHandler<ActionEvent> {
+    private Circle circle;
+    private int step;
+    public btnEventHandler(Circle circle,int step)
+    {
+        this.circle=circle;
+        this.step = step;
+    }
+
+
+    @Override
+    public void handle(ActionEvent actionEvent) {
+        circle.setRadius(circle.getRadius()+step);
+    }
+}
+
