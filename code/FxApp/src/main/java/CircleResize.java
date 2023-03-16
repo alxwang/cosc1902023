@@ -4,8 +4,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -30,7 +32,7 @@ public class CircleResize extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        StackPane pane = new StackPane();
+        Pane pane = new Pane();
         circle.setStroke(Color.BLACK);
         circle.setFill(Color.WHITE);
         pane.getChildren().add(circle);
@@ -61,6 +63,18 @@ public class CircleResize extends Application {
         btShrink.setOnAction(e->circle.setRadius(circle.getRadius()-5));
         btEnlarge.setOnAction(e->circle.setRadius(circle.getRadius()+5));
 
+        circle.setOnMouseClicked(e->{
+            if(e.getButton()== MouseButton.PRIMARY)
+            {
+                circle.setRadius(circle.getRadius()+5);
+            }
+            else if(e.getButton()==MouseButton.SECONDARY)
+            {
+                circle.setRadius(circle.getRadius()-5);
+            }
+        });
+
+
         hBox.getChildren().addAll(btEnlarge,btShrink);
 
         BorderPane borderPane = new BorderPane();
@@ -68,6 +82,17 @@ public class CircleResize extends Application {
         borderPane.setBottom(hBox);
 
         Scene scene = new Scene(borderPane, 300, 200);
+
+        scene.setOnKeyPressed(e->{
+            switch (e.getCode()){
+                case S -> {circle.setCenterY(circle.getCenterY()+20);}
+                case W -> circle.setCenterY(circle.getCenterY()-20);
+                case A -> circle.setCenterX(circle.getCenterX()-5);
+                case D -> circle.setCenterX(circle.getCenterX()+5);
+            }
+        });
+
+
         stage.setTitle("ControlCircle"); // Set the stage title
         stage.setScene(scene); // Place the scene in the stage
         stage.show(); // Display the stage
