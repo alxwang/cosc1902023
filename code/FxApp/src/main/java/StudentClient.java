@@ -1,5 +1,6 @@
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,6 +9,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 
 public class StudentClient extends Application {
@@ -34,9 +38,36 @@ public class StudentClient extends Application {
         pane.add(btSend,1,3);
         GridPane.setHalignment(btSend, HPos.RIGHT);
 
+        pane.setAlignment(Pos.CENTER);
+        tfName.setPrefColumnCount(15);
+        tfSteet.setPrefColumnCount(15);
+        tfCity.setPrefColumnCount(10);
+        tfPostcode.setPrefColumnCount(7);
+        tfProv.setPrefColumnCount(2);
+
         Scene scene = new Scene(pane, 450, 200);
         stage.setTitle("StudentClient"); // Set the stage title
         stage.setScene(scene); // Place the scene in the stage
         stage.show(); // Display the stage
+
+        btSend.setOnAction(e->{
+            try {
+                Socket socket = new Socket(host,StudentServer.PORT);
+                ObjectOutputStream stream=new ObjectOutputStream(socket.getOutputStream());
+                StudentAddress address=new StudentAddress(
+                        tfName.getText().trim(),
+                        tfSteet.getText().trim(),
+                        tfCity.getText().trim(),
+                        tfProv.getText().trim(),
+                        tfPostcode.getText().trim()
+                );
+                stream.writeObject(address);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+
+        });
+
     }
 }
