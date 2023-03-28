@@ -20,6 +20,15 @@
             <artifactId>javafx-controls</artifactId>
             <version>18.0.2</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx.media -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>15</version>
+            <type>pom</type>
+        </dependency>
+
     </dependencies>
 
 </project>

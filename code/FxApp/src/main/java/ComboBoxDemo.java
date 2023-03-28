@@ -43,8 +43,10 @@ public class ComboBoxDemo extends Application {
         paneForCombox.setLeft(new Label("Select a country"));
         paneForCombox.setCenter(cbo);
 
+        //Add texts(items) into combobox
         ObservableList<String> items = FXCollections.observableArrayList(flagTitles);
         cbo.getItems().addAll(items);
+        //Get combobox select item
         cbo.setOnAction(e->setDisplay(items.indexOf(cbo.getValue())));
         cbo.setPrefWidth(390);
         pane.setTop(paneForCombox);
