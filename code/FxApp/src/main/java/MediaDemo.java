@@ -42,7 +42,7 @@ public class MediaDemo extends Application {
         slider.setMinWidth(30);
         slider.setValue(50);
         mediaPlayer.volumeProperty().bind(slider.valueProperty().divide(100));
-        
+
         HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.CENTER);
         hBox.getChildren().addAll(playButton,rewindButton,

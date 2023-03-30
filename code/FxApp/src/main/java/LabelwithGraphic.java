@@ -12,11 +12,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import java.net.URL;
 
 public class LabelwithGraphic extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Image image = new Image(new FileInputStream("canada.png"));
+        //Image image = new Image(new FileInputStream("canada.png"));
+        Image image = new Image(getClass().getResourceAsStream("/img/canada.png"));
+
         Label lb1 = new Label("Canada",new ImageView(image));
         lb1.setStyle("-fx-border-color: green;-fx-border-width: 2");
         lb1.setContentDisplay(ContentDisplay.BOTTOM);
