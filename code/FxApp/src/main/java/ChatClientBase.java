@@ -27,6 +27,8 @@ public abstract class ChatClientBase extends Application {
         tf.setAlignment(Pos.CENTER_LEFT);
         paneForText.setCenter(tf);
 
+
+
         BorderPane pane = new BorderPane();
         TextArea ta = new TextArea();
         ta.setPrefColumnCount(80);
@@ -85,6 +87,26 @@ public abstract class ChatClientBase extends Application {
         Scene scene = new Scene(pane, 450, 200);
         stage.setTitle("Client"+" - "+getName()); // Set the stage title
         stage.setScene(scene); // Place the scene in the stage
+
+        stage.setOnCloseRequest(e->{
+            try {
+                dataOutputStream.writeUTF(MountPoint.BYE);
+                dataOutputStream.flush();
+                socket.close();
+                socket=null;
+                dataOutputStream=null;
+                dataInputStream=null;
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            finally {
+                Platform.exit();
+                System.exit(0);
+            }
+
+        });
+
+
         stage.show(); // Display the stage
         tf.requestFocus();
     }

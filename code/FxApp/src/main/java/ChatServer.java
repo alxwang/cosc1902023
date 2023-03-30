@@ -73,6 +73,16 @@ public class ChatServer extends Application {
         new Thread(()->{
             while(true)
             {
+                if(queue.isEmpty())
+                {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    continue;
+                }
+
                 String msg ;
                 synchronized(queue) {
                     msg=queue.remove();
