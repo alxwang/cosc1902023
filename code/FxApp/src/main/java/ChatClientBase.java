@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -106,6 +108,16 @@ public abstract class ChatClientBase extends Application {
 
         });
 
+        Image image = new Image(getClass().
+                getResourceAsStream("/img/clear.png"));
+        ImageView iv = new ImageView(image);
+        iv.setFitWidth(10);
+        iv.setFitHeight(10);
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem menuItemClear= new MenuItem("Clear",iv);
+        contextMenu.getItems().add(menuItemClear);
+        menuItemClear.setOnAction(e->ta.clear());
+        pane.setOnMousePressed(e->contextMenu.show(ta,e.getScreenX(),e.getScreenY()));
 
         stage.show(); // Display the stage
         tf.requestFocus();
