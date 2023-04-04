@@ -1,7 +1,10 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -12,6 +15,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 public class SlotMachine extends Application {
     //We support all 9 icons now
     final static int MAX_ICONS = 9;
@@ -24,6 +29,10 @@ public class SlotMachine extends Application {
     //The title
     Text txtResults = new Text("Results go Here - Cash $200.0");
 
+    private RadioButton[] lstBet = new  RadioButton[7];
+    final static String[] lstBetCap = {"$1","$2","$5","$10","$20","$50","$100"};
+
+    private double balance = 200.0;
 
     private Image[] loadImages()
     {
@@ -46,9 +55,11 @@ public class SlotMachine extends Application {
     public void start(Stage stage) throws Exception {
 //The overall border pane
         BorderPane obPane = new BorderPane();
+
         //Space bar to spin
         obPane.addEventFilter(KeyEvent.KEY_RELEASED, event->{
             if (event.getCode() == KeyCode.SPACE) {
+                spin();
             }});
         //The machine pane at center
         Pane obTop = new Pane();
@@ -87,10 +98,13 @@ public class SlotMachine extends Application {
         imgSpin.setFitWidth(100);
         Button cmdSpin = new Button("Spin",imgSpin);
 
+        cmdSpin.setOnAction(e->spin());
+
         ImageView imgCash = new ImageView(new Image(getClass().getResourceAsStream("/img/cash.png")));
         imgCash.setFitHeight(100);
         imgCash.setFitWidth(100);
         Button cmdCash = new Button("Cash Out",imgCash);
+        cmdCash.setOnAction(e->cashout());
         obBottom.getChildren().addAll(cmdSpin, cmdCash);
 
         //Init the slots
@@ -115,10 +129,133 @@ public class SlotMachine extends Application {
         txtResults.setY(310);
         obTop.getChildren().addAll(imgSlot1,imgSlot2,imgSlot3,txtResults);
 
+
+        //Bet pane
+        ToggleGroup group = new ToggleGroup();
+        for(int i=0;i<lstBet.length;i++)
+        {
+            lstBet[i] = new RadioButton(lstBetCap[i]);
+            lstBet[i].setToggleGroup(group);
+        }
+        lstBet[0].setSelected(true);
+        obRight.getChildren().addAll(lstBet);
+
+
         //Regular stuff
         Scene scene = new Scene(obPane, 887, 750);
         stage.setTitle("CST Slot Machine"); // Set the stage title
         stage.setScene(scene); // Place the scene in the stage
         stage.show(); // Display the stage
     }
+
+
+    //TODo: 1. Complete the bet choice window Hint: Using array of radio buttons
+
+    //Todo: 2. Complete the spin process - Each slot need to random display 10 images. Each image should show in the slow for 0.5 seconds
+    // When the animation of all slots are completed, the last images in each slot will be used to calc the win/loss
+    // Three same images , pay out the bet user chose. otherwise deduct the best amount from user's balance(200 to start)
+    int getCurImageIndex(ImageView imageView)
+    {
+        Image image = imageView.getImage();
+        for(int i=0;i<imgSource.length;i++)
+            if(imgSource[i]==image) return i;
+        return -1;
+    }
+
+    void setImage(ImageView imageView, int index)
+    {
+        imageView.setImage(imgSource[index]);
+    }
+
+    void rotateImage(ImageView imageView)
+    {
+        int curImage = getCurImageIndex(imageView);
+        int newImage = (int)(Math.random()*MAX_ICONS);
+        while(newImage==curImage) newImage = (int)(Math.random()*MAX_ICONS);
+        setImage(imageView,newImage);
+    }
+
+    private void spin()
+    {
+        if(balance<getBet())
+        {
+            showAlert(String.format("You have $%3.1f left. It is no enough for the bet.", balance));
+            return;
+        }
+        enableBet(false);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100),
+                e->{
+                    rotateImage(imgSlot1);
+                    rotateImage(imgSlot2);
+                    rotateImage(imgSlot3);
+                }));
+        timeline.setCycleCount(10);
+        timeline.setOnFinished(e->check());
+        timeline.play();
+    }
+
+    private int getBet()
+    {
+        for(RadioButton btn:lstBet)
+        {
+            if(btn.isSelected())
+            {
+                String cap = btn.getText();
+                cap=cap.substring(1);
+                return Integer.parseInt(cap);
+            }
+        }
+        return 0;
+    }
+
+    private void enableBet(boolean enable)
+    {
+        for(RadioButton btn:lstBet)
+        {
+            btn.setDisable(!enable);
+        }
+    }
+
+
+    private void check()
+    {
+        int index1 = getCurImageIndex(imgSlot1);
+        int index2 = getCurImageIndex(imgSlot2);
+        int index3 = getCurImageIndex(imgSlot3);
+
+        boolean bWin;
+        if(index1==index2 && index3==index2)
+        {
+            //Win
+            bWin = true;
+            balance+= getBet();
+        }
+        else
+        {
+            //Lost
+            bWin=false;
+            balance-= getBet();
+        }
+        String sRs=String.format("%s - Cash: $%3.1f", bWin?"You Win":"You Lost",balance);
+        txtResults.setText(sRs);
+        enableBet(true);
+    }
+
+
+
+    //Todo:3. when cash out button clicked, show the last balance(showAlert) and exit app
+
+    private void cashout()
+    {
+        String str = String.format("You have $%3.1f left.Bye.",balance);
+        showAlert(str);
+        System.exit(0);
+    }
+
+    //Todo:4. if user's has no money left, show a message(showAlert) and exit app
+
+    //Please submit your project to Mid-term 2 Sim before 11:59 PM today!
+
+
+
 }
