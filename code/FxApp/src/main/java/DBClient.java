@@ -106,18 +106,29 @@ public class DBClient extends Application {
                 i = 0;
                 out.writeObject(i);
                 String temp = (String) in.readObject();
-                Map<String,Integer> info = Arrays.asList(temp.split(",")).stream()
-                        .map(s->s.split(":"))
-                        .collect(Collectors.toMap(e->e[0],e->Integer.parseInt(e[1])));
+                List<String > info = Arrays.asList(temp.split(",")).stream()
+                        .map(s->{
+                            String[] sl = s.split(":");
+                            return sl[0] + " -> "+ sl[1];
+                        })
+                        .collect(Collectors.toList());
 
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500),
-                        e->{
-                                List<String> keys = new ArrayList<>(info.keySet());
-                                String randomKey = keys.get((int)(Math.random()*keys.size()));
-                                int ramdomVal = info.get(randomKey);
-                                label.setText(String.format("%s -> %d",randomKey,ramdomVal));
+                        e->label.setText(info.get((int)(Math.random()*info.size())))));
 
-                        }));
+
+//                Map<String,Integer> info = Arrays.asList(temp.split(",")).stream()
+//                        .map(s->s.split(":"))
+//                        .collect(Collectors.toMap(e->e[0],e->Integer.parseInt(e[1])));
+//
+//                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500),
+//                        e->{
+//                            List<String> keys = new ArrayList<>(info.keySet());
+//                            String randomKey = keys.get((int)(Math.random()*keys.size()));
+//                            int ramdomVal = info.get(randomKey);
+//                            label.setText(String.format("%s -> %d",randomKey,ramdomVal));
+//
+//                        }));
                 timeline.setCycleCount(Timeline.INDEFINITE);
                 timeline.play();
             }
